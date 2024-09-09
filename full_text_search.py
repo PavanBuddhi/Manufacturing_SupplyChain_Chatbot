@@ -30,7 +30,7 @@ def create_fts_table_with_link(db_path: str):
 
 # Call the function to create the FTS5 table and index the data, including the link attribute
 db_path = 'manufacturing_articles.db'
-create_fts_table_with_link(db_path)
+# create_fts_table_with_link(db_path)
 
 
 def remove_duplicates_from_articles(db_path: str):
@@ -96,10 +96,10 @@ def search_articles_with_link(db_path: str, query: str, limit: int = 3):
         conn.close()
 
 # Perform a full-text search on the articles, including the link attribute
-query = 'Garuda Aerospace signs pact with French Thales to promote drone ecosystem'
-results = search_articles_with_link(db_path, query)
+# query = 'Garuda Aerospace signs pact with French Thales to promote drone ecosystem'
+# results = search_articles_with_link(db_path, query)
 
 # Display the results with the link
-for content in results:
-    # print(f"Title: {title}\nSynopsis: {synopsis}\nLink: {link}\nContent: {content[:200]}...\n")
-    print(f"Content: {content}...\n")
+# for content in results:
+#     # print(f"Title: {title}\nSynopsis: {synopsis}\nLink: {link}\nContent: {content[:200]}...\n")
+#     print(f"Content: {content}...\n")

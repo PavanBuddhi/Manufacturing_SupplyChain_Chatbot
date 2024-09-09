@@ -3,7 +3,8 @@ import google.generativeai as genai
 from warnings import filterwarnings
 from dotenv import load_dotenv
 from full_text_search import search_articles_with_link
-from retrieval_generation import retrieve_context_from_pinecone
+from embedding_search import retrieve_context_from_pinecone
+from prompt import generate_prompt
 
 
 filterwarnings('ignore')
@@ -61,29 +62,29 @@ def combine_results(fts_results, pinecone_chunks, max_token_limit=7000):
     return combined_content[:max_token_limit]
 
 
-def generate_prompt(user_query: str, combined_context: str, prompt_type: str) -> str:
-    if prompt_type == "trends":
-        return (f"You are an expert in Indian manufacturing trends and technologies. "
-                f"Based on the following question: '{user_query}', provide a detailed response. "
-                f"Here is the context: {combined_context}. "
-                f"If the related context is not found then don't try to make up an answer. "
-                f"Your answer should include relevant company names, key industry trends, "
-                f"emerging technologies, and the impact of these technologies.")
+# def generate_prompt(user_query: str, combined_context: str, prompt_type: str) -> str:
+#     if prompt_type == "trends":
+#         return (f"You are an expert in Indian manufacturing and supply chain sector trends and technologies. "
+#                 f"Based on the following question: '{user_query}', provide a detailed response. "
+#                 f"Here is the context: {combined_context}. "
+#                 f"If the related context is not found then don't try to make up an answer. "
+#                 f"Your answer should include relevant company names, key industry trends, "
+#                 f"emerging technologies, and the impact of these technologies.")
     
-    elif prompt_type == "summary":
-        return (f"You are an expert in summarizing manufacturing trends and technologies. "
-                f"Summarize the following content on Indian manufacturing. "
-                f"Ensure the summary highlights key points, company names, technologies, "
-                f"trends, and the impact on the sector: {combined_context}")
+#     elif prompt_type == "summary":
+#         return (f"As an expert in the manufacturing and supply chain sector, "
+#                 f"provide a clear and concise summary of the following content in less than 300 words. "
+#                 f"Highlight key insights, including important company names, "
+#                 f"emerging technologies, industry trends, and their impact on the sector: {combined_context}.")
     
-    elif prompt_type == "explanation":
-        return (f"You are an expert in Indian manufacturing trends and technologies. "
-                f"Please explain the term '{user_query}' in the context of the Indian manufacturing sector. "
-                f"Here is some context for you: {combined_context}. "
-                f"Ensure the explanation is easy to understand, includes examples, "
-                f"and highlights its significance in the industry.")
+#     elif prompt_type == "explanation":
+#         return (f"You are an expert in Indian manufacturing and supply chain sector trends and technologies. "
+#                 f"Please explain the term '{user_query}' in the context of the Indian manufacturing sector. "
+#                 f"Here is some context for you: {combined_context}. "
+#                 f"Ensure the explanation is easy to understand, includes examples, "
+#                 f"and highlights its significance in the industry in less than 200 words.")
     
-    return ""
+#     return ""
 
 
 # Initialize the Gemini model ()
@@ -100,13 +101,14 @@ def generate_answer_with_gemini(prompt: str) -> str:
         str: LLM-generated response.
     """    
     model = genai.GenerativeModel(model_name='gemini-1.0-pro')
-    response = model.generate_content(prompt)
-    print(response.text)
+    response = model.generate_content(prompt, stream=True)
+    for part in response:
+        print(part.text)
     
     
 # Example of generating an answer
 def answer_query(user_query: str, prompt_type: str):
-    # context = retrieve_context_from_pinecone(user_query)
+    
     results = search_articles_with_link("manufacturing_articles.db", user_query)
     fts_results = []
     for content in results:
@@ -123,4 +125,4 @@ def answer_query(user_query: str, prompt_type: str):
     
     return answer
 
-answer_query("Deep tech powerhouse", "trends")
+answer_query("destination plant", "trends")

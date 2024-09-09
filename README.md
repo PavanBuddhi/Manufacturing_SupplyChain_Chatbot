@@ -1,5 +1,7 @@
 # Manufacturing_SupplyChain_Chatbot
 
+Helps in generating response as per the User queries, summaries and explaining industry specific terms with example.
+
 ## How to run?
 ### STEPS:
 
@@ -52,4 +54,12 @@ Run the below command to perform chunking and index vectors into Pinecone Vector
 
 ```bash
 python data_ingestion.py
+```
+
+### STEP 07 - Combine the chunks from both FTS and Embedding based search and generate response
+
+Run the below command to perform hybrid search and generate response
+
+```bash
+python hybrid_search.py
 ```

@@ -1,53 +1,38 @@
-def prompt_for_trends(user_query: str) -> str:
+def generate_prompt(user_query: str, combined_context: str, prompt_type: str) -> str:
+    
     """
-    Generates a prompt for answering questions related to Indian manufacturing trends and technologies.
+    Generates a prompt for answering questions as per the prompt type specified.
 
     Args:
-        user_query (str): The user's question related to manufacturing trends and technologies.
+        user_query (str): The user's question related to manufacturing and supply chain sector trends and technologies.
+        combined_context (str): Context for the prompt to include
+        prompt_type (str): Specifies the prompt type
 
     Returns:
         str: A well-structured prompt for generating a detailed response to the query. 
         The response includes relevant company names, key industry trends, emerging technologies, innovations, 
         and their potential impact on the industry.
     """
-    return (f"You are an expert in Indian manufacturing trends and technologies. "
-            f"Based on the following question: '{user_query}', provide a detailed response. "
-            f"Your answer should include any relevant company names, key industry trends, "
-            f"emerging technologies, innovations, and the potential impact of these technologies on the industry.")
-
-
-def prompt_for_summary(article_content: str) -> str:
-    """
-    Generates a prompt for summarizing an article related to Indian manufacturing.
-
-    Args:
-        article_content (str): The content of the article to be summarized.
-
-    Returns:
-        str: A structured prompt for generating a summary that highlights key points, including company names, 
-        technologies mentioned, industry trends, and the potential impact on the manufacturing sector.
-    """
-    return (f"You are an expert in summarizing manufacturing trends and technologies. "
-            f"Please summarize the following article on Indian manufacturing. "
-            f"Ensure the summary highlights the key points, including relevant company names, "
-            f"the technologies mentioned, industry trends, and the potential impact on the manufacturing sector: {article_content}")
-
-
-def prompt_for_explanation(industry_term: str) -> str:
-    """
-    Generates a prompt for explaining industry-specific terms and concepts within the context of Indian manufacturing.
-
-    Args:
-        industry_term (str): The term or concept to be explained.
-
-    Returns:
-        str: A well-structured prompt for explaining the term, ensuring clarity, practical examples, 
-        and an understanding of its significance in the Indian manufacturing sector.
-    """
-    return (f"You are an expert in Indian manufacturing trends and technologies. "
-            f"Please explain the term '{industry_term}' in the context of the Indian manufacturing sector. "
-            f"Ensure that the explanation is easy to understand, includes practical examples, and highlights its significance in the industry.")
-
-
-# Example usage
-prompt = prompt_for_trends("What are the current trends in robotics?")
+    
+    if prompt_type == "trends":
+        return (f"You are an expert in Indian manufacturing and supply chain sector trends and technologies. "
+                f"Based on the following question: '{user_query}', provide a detailed response in less than 300 words. "
+                f"Here is the context: {combined_context}. "
+                f"If the related context is not found then don't try to make up an answer. "
+                f"Your answer should include relevant company names, key industry trends, "
+                f"emerging technologies, and the impact of these technologies.")
+    
+    elif prompt_type == "summary":
+        return (f"As an expert in the manufacturing and supply chain sector, "
+                f"provide a clear and concise summary of the following content in less than 200 words. "
+                f"Highlight key insights, including important company names, "
+                f"emerging technologies, industry trends, and their impact on the sector: {combined_context}.")
+    
+    elif prompt_type == "explanation":
+        return (f"You are an expert in Indian manufacturing and supply chain sector trends and technologies. "
+                f"Please explain the term '{user_query}' in the context of the Indian manufacturing and supply chain sector. "
+                f"Here is some context for you: {combined_context}. "
+                f"Ensure the explanation is easy to understand, includes examples, "
+                f"and highlights its significance in the industry in less than 100 words.")
+    
+    return ""
